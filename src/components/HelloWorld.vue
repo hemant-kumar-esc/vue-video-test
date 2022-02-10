@@ -29,16 +29,18 @@
           >Please select {{ 2 - comparedKey.length }} video from below list</p>
           <div class="columns">
             <div class="column"> 
-              <div class="block" @click="addVideoToCompare(comparedValue[0])" v-if="comparedValue[0]"> <b-icon icon="close" size="is-medium"></b-icon> </div>
+              <div class="block pointer" @click="addVideoToCompare(comparedValue[0])" v-if="comparedValue[0]"> <b-icon icon="close" size="is-medium"></b-icon> </div>
               <Player v-if="comparedValue[0]" :playerOptions="comparedValue[0]" :isPlay="isPlay" ></Player>
+              <p v-if="comparedValue[0]">{{ comparedValue[0].team.name}}</p>
             </div>
             <div class="column">
-              <div class="block" @click="addVideoToCompare(comparedValue[1])" v-if="comparedValue[1]"> <b-icon icon="close" size="is-medium"></b-icon> </div>
+              <div class="block pointer" @click="addVideoToCompare(comparedValue[1])" v-if="comparedValue[1]"> <b-icon icon="close" size="is-medium"></b-icon> </div>
               <Player v-if="comparedValue[1]" :playerOptions="comparedValue[1]" :isPlay="isPlay" ></Player>
+              <p v-if="comparedValue[1]">{{ comparedValue[1].team.name}}</p>
             </div>
           </div>
-          <div class="columns">
-            <div class="column has-text-centered">
+          <div class="columns" v-if="comparedKey.length ==2">
+            <div class="column has-text-centered pointer">
               <b-button type="is-info" @click="updateVideoStatus('play')" v-if="!isPlay">Play</b-button>
               <b-button type="is-link" @click="updateVideoStatus('pause')" v-if="isPlay">Pause</b-button>
             </div>
@@ -103,7 +105,7 @@ export default {
       current: 1,
       comparedValue: [],
       comparedKey: [],
-      isCompared: true,
+      isCompared: false,
       isPlay : false
     };
   },
@@ -129,7 +131,8 @@ export default {
       }
     },
     addVideoToCompare(feed) {
-      if (!this.isCompared) return;
+      if (!this.isCompared || (!this.comparedKey.includes(feed.id) && this.comparedKey.length ==2)) return;
+      
       if (!this.comparedKey.includes(feed.id)) {
 
         this.comparedValue.push(feed);
@@ -162,4 +165,5 @@ export default {
 .compare-section .video-frame video{
   height:320px;
 }
+.pointer{ cursor:pointer}
 </style>
